@@ -11,7 +11,8 @@ function App() {
 	const [town, setTown] = useState("");
 	const [adress, setAdress] = useState("");
 	const [display, isDisplay] = useState(false);
-	const [submit, isSubmit] = useState(false);
+	const [submit, isSubmit] = useState(true);
+	const [miss, isMiss] = useState(false);
 
 	const autoInput = () => {
 		isDisplay(false);
@@ -33,50 +34,58 @@ function App() {
 
 	const handleSubmit = () => {
 		if (pref && city && town && adress) {
-			isSubmit(true);
 			setPref("");
 			setCity("");
 			setTown("");
 			setAdress("");
 			console.log(pref, city, town, adress);
+			isSubmit(false);
+		} else {
+			isMiss(true);
 		}
 	};
 
 	return (
 		<>
-			<Tag
-				title="郵便番号"
-				example={code}
-				placeholder="例）5650862"
-				inputText={(e) => setCode(e.target.value)}
-			/>
-			{display && <p>正しく入力してください。</p>}
-			<button onClick={autoInput}>自動入力</button>
-			<Tag
-				title="都道府県"
-				example={pref}
-				placeholder="例）大阪府"
-				inputText={(e) => setPref(e.target.value)}
-			/>
-			<Tag
-				title="市区町村"
-				example={city}
-				placeholder="例）吹田市"
-				inputText={(e) => setCity(e.target.value)}
-			/>
-			<Tag
-				title="町域"
-				example={town}
-				placeholder="例）津雲台"
-				inputText={(e) => setTown(e.target.value)}
-			/>
-			<Tag
-				title="番地・マンション名"
-				inputText={(e) => setAdress(e.target.value)}
-			/>
-			<br />
-			<button onClick={handleSubmit}>送信</button>
-			{submit && <p>送信しました。</p>}
+			{submit ? (
+				<div>
+					<Tag
+						title="郵便番号"
+						example={code}
+						placeholder="例）5650862"
+						inputText={(e) => setCode(e.target.value)}
+					/>
+					{display && <p>正しく入力してください。</p>}
+					<button onClick={autoInput}>自動入力</button>
+					<Tag
+						title="都道府県"
+						example={pref}
+						placeholder="例）大阪府"
+						inputText={(e) => setPref(e.target.value)}
+					/>
+					<Tag
+						title="市区町村"
+						example={city}
+						placeholder="例）吹田市"
+						inputText={(e) => setCity(e.target.value)}
+					/>
+					<Tag
+						title="町域"
+						example={town}
+						placeholder="例）津雲台"
+						inputText={(e) => setTown(e.target.value)}
+					/>
+					<Tag
+						title="番地・マンション名"
+						inputText={(e) => setAdress(e.target.value)}
+					/>
+					<br />
+					<button onClick={handleSubmit}>送信</button>
+					{miss && <p>正しく入力してください</p>}
+				</div>
+			) : (
+				<p>送信しました。</p>
+			)}
 		</>
 	);
 }
