@@ -1,7 +1,54 @@
-import AutoInput from "./components/AutoInput";
-import Tag from "./components/Tag";
+import React, { useState } from "react";
+import axios from "axios";
+import axiosJsonAdapter from "axios-jsonp";
 
-const TagList = () => {
+import AutoInput from "./AutoInput";
+import Submit from "./Submit"; //
+import Tag from "./Tag";
+
+const JAPANPOST_API_URI = "https://zipcloud.ibsnet.co.jp/api/search?zipcode="; //
+
+const TagList = ({ isSubmited }) => {
+	const [code, setCode] = useState("");
+	const [display, isDisplay] = useState(false);
+	const [pref, setPref] = useState("");
+	const [city, setCity] = useState("");
+	const [town, setTown] = useState("");
+	const [adress, setAdress] = useState("");
+	const [miss, isMiss] = useState(false);
+
+	const autoInput = () => {
+		isDisplay(false);
+		const callApi = async () => {
+			const res = await axios.get(JAPANPOST_API_URI + code, {
+				adapter: axiosJsonAdapter,
+			});
+			try {
+				const results = res.data.results[0];
+				const { address1, address2, address3 } = { ...results };
+				setPref(address1);
+				setCity(address2);
+				setTown(address3);
+			} catch {
+				isDisplay(true);
+				setCode("");
+			}
+		};
+		callApi();
+	};
+
+	const handleSubmit = () => {
+		if (pref && city && town && adress) {
+			setPref("");
+			setCity("");
+			setTown("");
+			setAdress("");
+			console.log(pref, city, town, adress);
+			isSubmited(false);
+		} else {
+			isMiss(true);
+		}
+	};
 	return (
 		<>
 			<Tag
