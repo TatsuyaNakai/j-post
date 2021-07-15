@@ -1,9 +1,21 @@
 import React, { useState } from "react";
-import Tag from "./components/Tag";
+import Tag from "./components/Tag"; //
 import axios from "axios";
 import axiosJsonAdapter from "axios-jsonp";
+import { makeStyles } from "@material-ui/core";
+import Header from "./components/Header";
+import Submit from "./components/Submit"; //
+import AutoInput from "./components/AutoInput";
+import TagList from "./components/TagList";
 
 const JAPANPOST_API_URI = "https://zipcloud.ibsnet.co.jp/api/search?zipcode=";
+const useStyles = makeStyles({
+	form: {
+		display: "block",
+		width: "60%",
+		margin: "5% auto",
+	},
+});
 
 function App() {
 	const [code, setCode] = useState("");
@@ -14,6 +26,7 @@ function App() {
 	const [display, isDisplay] = useState(false);
 	const [submit, isSubmit] = useState(true);
 	const [miss, isMiss] = useState(false);
+	const classes = useStyles();
 
 	const autoInput = () => {
 		isDisplay(false);
@@ -50,45 +63,47 @@ function App() {
 
 	return (
 		<>
-			{submit ? (
-				<div>
-					<Tag
-						title="郵便番号"
-						example={code}
-						placeholder="例）5650862"
-						inputText={(e) => setCode(e.target.value)}
-					/>
-					{display && <p>正しく入力してください。</p>}
-					<button onClick={autoInput}>自動入力</button>
-					<Tag
-						title="都道府県"
-						example={pref}
-						placeholder="例）大阪府"
-						inputText={(e) => setPref(e.target.value)}
-					/>
-					<Tag
-						title="市区町村"
-						example={city}
-						placeholder="例）吹田市"
-						inputText={(e) => setCity(e.target.value)}
-					/>
-					<Tag
-						title="町域"
-						example={town}
-						placeholder="例）津雲台"
-						inputText={(e) => setTown(e.target.value)}
-					/>
-					<Tag
-						title="番地・マンション名"
-						inputText={(e) => setAdress(e.target.value)}
-					/>
-					<br />
-					<button onClick={handleSubmit}>送信</button>
-					{miss && <p>正しく入力してください</p>}
-				</div>
-			) : (
-				<p>送信しました。</p>
-			)}
+			<Header />
+			<div className={classes.form}>
+				{submit ? (
+					// <TagList />
+					<div>
+						<Tag
+							title="郵便番号"
+							example={code}
+							placeholder="5650862"
+							inputText={(e) => setCode(e.target.value)}
+						/>
+						<AutoInput autoInput={autoInput} display={display} />
+						<Tag
+							title="都道府県"
+							example={pref}
+							placeholder="大阪府"
+							inputText={(e) => setPref(e.target.value)}
+						/>
+						<Tag
+							title="市区町村"
+							example={city}
+							placeholder="吹田市"
+							inputText={(e) => setCity(e.target.value)}
+						/>
+						<Tag
+							title="町域"
+							example={town}
+							placeholder="津雲台"
+							inputText={(e) => setTown(e.target.value)}
+						/>
+						<Tag
+							title="番地・マンション名"
+							inputText={(e) => setAdress(e.target.value)}
+						/>
+						<br />
+						<Submit handleSubmit={handleSubmit} miss={miss} />
+					</div>
+				) : (
+					<p className={classes.submit}>ありがとうございます、送信しました。</p>
+				)}
+			</div>
 		</>
 	);
 }

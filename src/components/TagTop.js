@@ -1,22 +1,6 @@
 import { TextField } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles({
-	tag: {
-		display: "flex",
-		alignItems: "center",
-		margin: "2% 0",
-	},
-	title: {
-		width: "60%",
-		marginRight: "5%",
-	},
-	textField: {
-		width: "80%",
-	},
-});
-
-const Tag = ({ title, example, placeholder, inputText }) => {
+const TagTop = ({ title, example, placeholder, inputText }) => {
 	const classes = useStyles();
 
 	return (
@@ -30,8 +14,9 @@ const Tag = ({ title, example, placeholder, inputText }) => {
 				value={example}
 				variant="outlined"
 				onChange={inputText}
+				size="small"
 			/>
 		</div>
 	);
 };
-export default Tag;
+export default TagTop;
