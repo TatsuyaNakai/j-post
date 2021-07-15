@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Tag from "./components/Tag";
 import axios from "axios";
+import axiosJsonAdapter from "axios-jsonp";
 
 const JAPANPOST_API_URI = "https://zipcloud.ibsnet.co.jp/api/search?zipcode=";
 
@@ -17,7 +18,9 @@ function App() {
 	const autoInput = () => {
 		isDisplay(false);
 		const callApi = async () => {
-			const res = await axios.get(JAPANPOST_API_URI + code);
+			const res = await axios.get(JAPANPOST_API_URI + code, {
+				adapter: axiosJsonAdapter,
+			});
 			try {
 				const results = res.data.results[0];
 				const { address1, address2, address3 } = { ...results };
